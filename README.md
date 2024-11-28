@@ -1,6 +1,63 @@
 # CustomerSeg-Customer-Segmentation-and-Shopping-Analysis
 
-Kullanılan Kütüphaneler 
+
+![image](https://github.com/user-attachments/assets/a1d2ccf2-0eb9-4482-bac5-709940ab48a6)
+
+Bu proje, toptan müşterilere ait verilerde çeşitli analiz ve kümeleme yöntemlerini kullanarak veri keşfi, segmentasyon, modelleme ve görselleştirme işlemlerini gerçekleştirmeyi amaçlamaktadır. 
+
+
+- **Toptan müşterilere ilişkin veriyi anlamak, temel istatistiklerini incelemek ve veri setindeki kalıpları belirlemek.**
+- **Müşterileri satın alma davranışlarına göre gruplara ayırmak (segmentasyon) ve farklı kümeleme algoritmalarını (K-Means, DBSCAN, GMM) karşılaştırmak.**
+- **PCA (Principal Component Analysis) ile veriyi görselleştirmek ve kümelerin ayrılabilirliğini analiz etmek.**
+- **Karar ağacı kullanarak, müşterilerin belirli özelliklerine göre hangi kanaldan (Channel) olduğu hakkında tahmin yapmak.**
+- **Farklı değişkenler arasındaki ilişkileri  test etmek.**
+- **Elde edilen sonuçları grafiklerle anlamlandırmak ve aykırı değerleri analiz etmek.**
+  
+
+# Veriyi Yükleme ve Ön İşleme
+
+Veri setini analiz etmek, normalize etmek ve kümeleme için uygun hale getirildi. Veri seti bir CSV dosyasından yüklendi. head(), str(), ve summary() fonksiyonları ile veri incelendi. Verinin sadece sayısal sütunları seçilerek, bu sütunlar normalize edildi (scale()).
+
+
+# Kümeleme Algoritmaları
+
+# 1. K-Means Kümelemesi
+
+Müşteri segmentlerini tanımlamak ve her grubun özelliklerini analiz etmek için K-Means  kullanıldı.  Küme sayısını belirlemek için Elbow Yöntemi ve Silhouette Skoru kullanıldı. Veriler, 3 küme olacak şekilde K-Means algoritmasıyla segmentlere ayrıldı. Her bir küme için temel istatistikler hesaplandı.
+
+# 2. DBSCAN Kümelemesi
+
+K-Means ile kıyaslanabilir alternatif bir kümeleme yöntemi denemek için DSBCAN kümelemesi kullanıldı. DBSCAN algoritması, yoğunluk temelli kümeleme için kullanıldı. eps (komşuluk yarıçapı) ve minPts (minimum komşu sayısı) parametreleri belirlendi. DBSCAN kümeleri PCA ile görselleştirildi.
+
+
+# 3. GMM (Gaussian Mixture Model) Kümelemesi
+
+K-Means ve DBSCAN’e ek olarak, verilerdeki olası karmaşık yapıları yakalamak için GMM kümelemesi kullanıldı. Veriler, GMM kullanılarak kümelendi. BIC (Bayesian Information Criterion) ve AIC (Akaike Information Criterion) değerleri hesaplandı. Farklı küme sayıları denenerek en iyi model seçildi.
+
+# Boyut İndirgeme ve Görselleştirme
+
+Kümelerin görsel olarak ayrılabilirliğini analiz etmek ve boyut indirgeme tekniklerini uygulandı. PCA (Principal Component Analysis) ile veri boyutu 2’ye indirildi. PCA sonuçları kullanılarak K-Means, DBSCAN ve GMM kümeleri görselleştirildi.
+
+
+# Aykırı Değer Analizi
+
+Veri setindeki olası aykırı değerleri analiz etmek ve veri kalitesini değerlendirildi. Aykırı değerler IQR (Interquartile Range) yöntemiyle tespit edildi. Boxplot kullanılarak aykırı değerlerin görselleştirilmesi sağlandı.
+
+# İlişki Analizi
+
+Kategorik değişkenler arasındaki anlamlı ilişkileri incelendi. Channel (müşteri tipi) ve Region (bölge) değişkenleri arasındaki ilişki, Ki-Kare Testi ile analiz edildi. Barplot grafikleri ile bu ilişki görselleştirildi.
+
+# Karar Ağacı (Decision Tree) Modeli
+
+Müşterilerin özelliklerine dayanarak kanal tahmini yapıldı ve sınıflandırma performansını ölçüldü. Channel (müşteri tipi) tahmini için karar ağacı modeli oluşturuldu. Veri seti eğitim (%70) ve test (%30) olarak bölündü. Test verisinde tahmin yapılarak modelin doğruluk oranı ve karmaşıklık matrisi hesaplandı. Karar ağacı grafiği çizilerek modelin yapısı görselleştirildi.
+
+# Korelasyon Analizi
+
+Sayısal değişkenler arasındaki ilişkileri analiz edildi. Tüm sayısal sütunlar arasındaki korelasyonlar hesaplandı. Korelasyon matrisinin görselleştirilmesi için ısı haritası (ggcorrplot) oluşturuldu.
+
+
+# Kullanılan Kütüphaneler 
+
 Veri kümelemesi için mclust ve dbscan kullanılır.
 Veri görselleştirme için ggplot2 ve ggcorrplot kullanılır.
 Kümeleme ve modelleme için cluster ve rpart kullanılır. Bu kütüphaneler, veri analizi sürecindeki her aşamayı destekleyen ve çok yönlü çözümler sağlayan araçlardır.
