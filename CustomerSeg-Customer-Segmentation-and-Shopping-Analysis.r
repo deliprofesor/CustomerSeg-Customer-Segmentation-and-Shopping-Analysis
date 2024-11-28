@@ -1,7 +1,15 @@
-
+#kütüphanlerin indirilmesi 
 install.packages("dbscan")
 install.packages("mclust")
 install.packages("ggcorrplot")
+install.packages("dplyr")
+install.packages("rpart.plot")
+install.packages("pROC")
+
+#kütüphanlerin yüklenmesi 
+library(rpart.plot)
+library(pROC)
+library(dplyr)
 library(mclust)
 library(ggplot2)
 library(dbscan)
@@ -16,9 +24,8 @@ head(data)
 str(data)
 summary(data)
 
-# Sayısal sütunları seçme 
+# Sayısal sütunları seçme
 numerical_data <- data[, c("Fresh", "Milk", "Grocery", "Frozen", "Detergents_Paper", "Delicassen")]
-
 
 scaled_data <- scale(numerical_data)
 head(scaled_data)
@@ -33,23 +40,14 @@ for (k in 1:15) {
 # Elbow grafiğini çizme
 plot(1:15, wss, type = "b", main = "Elbow Method", xlab = "Küme Sayısı", ylab = "İçsel Dağılım")
 
+# Silhouette skorunu çizme
 sil_score <- numeric(15)
 for (k in 2:15) {
   kmeans_model <- kmeans(scaled_data, centers = k, nstart = 25)
   sil_score[k] <- silhouette(kmeans_model$cluster, dist(scaled_data))[, 3]
 }
 
-# Silhouette skorunu çizme
-plot(2:15, sil_score[2:15], type = "b", main = "Silhouette Score", xlab = "Küme Sayısı", ylab = "Silhouette Skoru")
-
-
-sil_score <- numeric(15)
-for (k in 2:15) {
-  kmeans_model <- kmeans(scaled_data, centers = k, nstart = 25)
-  sil_score[k] <- silhouette(kmeans_model$cluster, dist(scaled_data))[, 3]
-}
-
-# Silhouette skorunu çizme
+# Silhouette grafiği
 plot(2:15, sil_score[2:15], type = "b", main = "Silhouette Score", xlab = "Küme Sayısı", ylab = "Silhouette Skoru")
 
 # K-Means kümelemesi (3 küme)
@@ -62,6 +60,21 @@ data$Cluster <- as.factor(kmeans_model$cluster)
 # Kümeleme sonuçlarını inceleyelim
 table(data$Cluster)
 
+# Kümeleme algoritmalarının temel istatistiklerinin karşılaştırılması
+cluster_summary <- data %>%
+  group_by(Cluster) %>%
+  summarise(
+    Fresh_mean = mean(Fresh),
+    Milk_mean = mean(Milk),
+    Grocery_mean = mean(Grocery),
+    Frozen_mean = mean(Frozen),
+    Detergents_Paper_mean = mean(Detergents_Paper),
+    Delicassen_mean = mean(Delicassen)
+  )
+
+# Küme başına özet istatistikleri yazdırma
+print(cluster_summary)
+
 # PCA ile boyut indirgeme
 pca <- prcomp(scaled_data)
 
@@ -69,7 +82,6 @@ pca <- prcomp(scaled_data)
 data_pca <- data.frame(pca$x[, 1:2], Cluster = data$Cluster)
 
 # PCA sonuçlarını görselleştirme
-
 ggplot(data_pca, aes(x = PC1, y = PC2, color = Cluster)) +
   geom_point() +
   labs(title = "PCA ile Kümeleme Sonuçları", x = "PC1", y = "PC2")
@@ -85,14 +97,14 @@ data$DBSCAN_Cluster <- as.factor(dbscan_model$cluster)
 
 # DBSCAN kümeleme sonuçlarını inceleyelim
 head(data)
+
 # PCA ile boyut indirgeme
 pca_dbscan <- prcomp(scaled_data)
 
 # PCA sonuçlarını veri setine ekleme
 data_pca_dbscan <- data.frame(pca_dbscan$x[, 1:2], DBSCAN_Cluster = data$DBSCAN_Cluster)
 
-# PCA sonuçlarını görselleştirme
-
+# DBSCAN ile kümeleme sonuçlarını görselleştirme
 ggplot(data_pca_dbscan, aes(x = PC1, y = PC2, color = DBSCAN_Cluster)) +
   geom_point() +
   labs(title = "DBSCAN ile Kümeleme Sonuçları (PCA)", x = "PC1", y = "PC2")
@@ -116,10 +128,10 @@ pca_gmm <- prcomp(scaled_data)
 data_pca_gmm <- data.frame(pca_gmm$x[, 1:2], GMM_Cluster = data$GMM_Cluster)
 
 # PCA sonuçlarını görselleştirme
-
 ggplot(data_pca_gmm, aes(x = PC1, y = PC2, color = GMM_Cluster)) +
   geom_point() +
   labs(title = "GMM ile Kümeleme Sonuçları (PCA)", x = "PC1", y = "PC2")
+
 # BIC ve AIC değerlerini görmek
 bic_value <- gmm_model$bic
 aic_value <- gmm_model$aic
@@ -137,12 +149,10 @@ table(gmm_model_2$classification)
 table(gmm_model_3$classification)
 
 # Boxplot ile aykırı değerleri görselleştirme
-
 ggplot(data, aes(x = "", y = Fresh)) +
   geom_boxplot() +
   labs(title = "Fresh Ürün için Aykırı Değerler")
 
-# Diğer kategoriler için de benzer şekilde boxplot çizilebilir
 # Aykırı değerleri tespit etme (Fresh sütunu için örnek)
 Q1 <- quantile(data$Fresh, 0.25)
 Q3 <- quantile(data$Fresh, 0.75)
@@ -151,12 +161,13 @@ IQR <- Q3 - Q1
 # Aykırı değerler
 outliers <- data$Fresh < (Q1 - 1.5 * IQR) | data$Fresh > (Q3 + 1.5 * IQR)
 sum(outliers)  # Aykırı değerlerin sayısı
+
 # Korelasyon analizi
 correlation_matrix <- cor(scaled_data)
 
 # Korelasyon matrisini görselleştirme
-
 ggcorrplot(correlation_matrix, lab = TRUE, title = "Korelasyon Isısı Haritası")
+
 # PCA uygulama
 pca <- prcomp(scaled_data)
 
@@ -168,6 +179,7 @@ pca_data <- data.frame(pca$x[, 1:2], Cluster = data$Cluster)
 ggplot(pca_data, aes(x = PC1, y = PC2, color = Cluster)) +
   geom_point() +
   labs(title = "PCA ile Boyut İndirgeme Sonuçları")
+
 # Channel ve Region arasındaki ilişkiyi test etme
 table_channel_region <- table(data$Channel, data$Region)
 chisq_test <- chisq.test(table_channel_region)
@@ -179,17 +191,37 @@ chisq_test
 ggplot(data, aes(x = Channel, fill = Region)) +
   geom_bar(position = "fill") +
   labs(title = "Channel ve Region İlişkisi")
-# Kümeleme sonuçlarının karşılaştırılması
-cluster_summary <- data %>%
-  group_by(Cluster) %>%
-  summarise(across(Fresh:Delicassen, list(mean = mean, sd = sd)))
 
-print(cluster_summary)
 # Decision Tree (Karar Ağaçları) Sınıflandırması
-
 model <- rpart(Channel ~ Fresh + Milk + Grocery + Frozen + Detergents_Paper + Delicassen, data = data, method = "class")
 summary(model)
 
 # Karar ağacını görselleştirme
-library(rpart.plot)
 rpart.plot(model)
+
+# Veriyi bölme: Eğitim ve test setleri
+set.seed(123) # Rastgelelik için sabit bir değer
+train_indices <- sample(1:nrow(data), size = 0.7 * nrow(data)) # %70 eğitim, %30 test
+train_data <- data[train_indices, ]
+test_data <- data[-train_indices, ]
+
+# Modeli tekrar oluşturma
+model <- rpart(Channel ~ Fresh + Milk + Grocery + Frozen + Detergents_Paper + Delicassen,
+               data = train_data, method = "class")
+
+# Test verisi üzerinde tahmin
+predictions <- predict(model, test_data, type = "class")
+
+# Doğruluk oranı
+accuracy <- sum(predictions == test_data$Channel) / nrow(test_data)
+cat("Modelin doğruluk oranı:", round(accuracy * 100, 2), "%\n")
+
+# Karmaşıklık Matrisi
+conf_matrix <- table(Predicted = predictions, Actual = test_data$Channel)
+cat("Karmaşıklık Matrisi:\n")
+print(conf_matrix)
+
+
+
+
+
