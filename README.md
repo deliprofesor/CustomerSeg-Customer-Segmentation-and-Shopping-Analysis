@@ -40,27 +40,44 @@ Veri setini analiz etmek, normalize etmek ve kümeleme için uygun hale getirild
 
 # Kümeleme Algoritmaları
 
-# 1. K-Means Kümelemesi
+# K-Means Kümelemesi
 
 Müşteri segmentlerini tanımlamak ve her grubun özelliklerini analiz etmek için K-Means  kullanıldı.  Küme sayısını belirlemek için Elbow Yöntemi ve Silhouette Skoru kullanıldı. Veriler, 3 küme olacak şekilde K-Means algoritmasıyla segmentlere ayrıldı. Her bir küme için temel istatistikler hesaplandı.
 
-# 2. DBSCAN Kümelemesi
+![elbow](https://github.com/user-attachments/assets/63232d0a-e047-43b1-9f64-123c49f2d1f9)
+
+![silhouette](https://github.com/user-attachments/assets/93a6f240-067e-4169-a284-295fded31504)
+
+![silhouette-score](https://github.com/user-attachments/assets/3dc1235e-a3a4-4a51-a97a-deedeba42683)
+
+
+# DBSCAN Kümelemesi
 
 K-Means ile kıyaslanabilir alternatif bir kümeleme yöntemi denemek için DSBCAN kümelemesi kullanıldı. DBSCAN algoritması, yoğunluk temelli kümeleme için kullanıldı. eps (komşuluk yarıçapı) ve minPts (minimum komşu sayısı) parametreleri belirlendi. DBSCAN kümeleri PCA ile görselleştirildi.
 
 
-# 3. GMM (Gaussian Mixture Model) Kümelemesi
+![DSBCAN_PCA](https://github.com/user-attachments/assets/4d04ec9f-00d9-4ff9-a890-0312db832c67)
+
+
+# GMM (Gaussian Mixture Model) Kümelemesi
 
 K-Means ve DBSCAN’e ek olarak, verilerdeki olası karmaşık yapıları yakalamak için GMM kümelemesi kullanıldı. Veriler, GMM kullanılarak kümelendi. BIC (Bayesian Information Criterion) ve AIC (Akaike Information Criterion) değerleri hesaplandı. Farklı küme sayıları denenerek en iyi model seçildi.
+
+![GMM_PCA](https://github.com/user-attachments/assets/783f767d-de97-4943-b614-c0a26d83033a)
 
 # Boyut İndirgeme ve Görselleştirme
 
 Kümelerin görsel olarak ayrılabilirliğini analiz etmek ve boyut indirgeme tekniklerini uygulandı. PCA (Principal Component Analysis) ile veri boyutu 2’ye indirildi. PCA sonuçları kullanılarak K-Means, DBSCAN ve GMM kümeleri görselleştirildi.
+![PCA](https://github.com/user-attachments/assets/8bfaa9cb-2337-496e-8f0c-67e83343b79b)
+
+![PCA_boyut_indirgeme](https://github.com/user-attachments/assets/b582d151-de5f-48aa-ac91-52d9bee609b8)
 
 
 # Aykırı Değer Analizi
 
 Veri setindeki olası aykırı değerleri analiz etmek ve veri kalitesini değerlendirildi. Aykırı değerler IQR (Interquartile Range) yöntemiyle tespit edildi. Boxplot kullanılarak aykırı değerlerin görselleştirilmesi sağlandı.
+
+![Fresh_aykırı_değerler](https://github.com/user-attachments/assets/a349d03d-77e3-418d-a77c-dd355a8357cd)
 
 # İlişki Analizi
 
@@ -70,9 +87,12 @@ Kategorik değişkenler arasındaki anlamlı ilişkileri incelendi. Channel (mü
 
 Müşterilerin özelliklerine dayanarak kanal tahmini yapıldı ve sınıflandırma performansını ölçüldü. Channel (müşteri tipi) tahmini için karar ağacı modeli oluşturuldu. Veri seti eğitim (%70) ve test (%30) olarak bölündü. Test verisinde tahmin yapılarak modelin doğruluk oranı ve karmaşıklık matrisi hesaplandı. Karar ağacı grafiği çizilerek modelin yapısı görselleştirildi.
 
+![karar_ağacı](https://github.com/user-attachments/assets/8ef695bb-d4cc-44cf-9962-14e537dfa44e)
+
 # Korelasyon Analizi
 
 Sayısal değişkenler arasındaki ilişkileri analiz edildi. Tüm sayısal sütunlar arasındaki korelasyonlar hesaplandı. Korelasyon matrisinin görselleştirilmesi için ısı haritası (ggcorrplot) oluşturuldu.
 
+![korelasyon](https://github.com/user-attachments/assets/5a15e39c-05b4-4bca-9d00-205663f6c825)
 
 
