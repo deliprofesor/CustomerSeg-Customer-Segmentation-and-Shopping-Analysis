@@ -47,7 +47,6 @@ Müşteri segmentlerini tanımlamak ve her grubun özelliklerini analiz etmek i�
 ![elbow](https://github.com/user-attachments/assets/63232d0a-e047-43b1-9f64-123c49f2d1f9)
 
 ![silhouette](https://github.com/user-attachments/assets/93a6f240-067e-4169-a284-295fded31504)
-
 ![silhouette-score](https://github.com/user-attachments/assets/3dc1235e-a3a4-4a51-a97a-deedeba42683)
 
 
@@ -68,6 +67,7 @@ K-Means ve DBSCAN’e ek olarak, verilerdeki olası karmaşık yapıları yakala
 # Boyut İndirgeme ve Görselleştirme
 
 Kümelerin görsel olarak ayrılabilirliğini analiz etmek ve boyut indirgeme tekniklerini uygulandı. PCA (Principal Component Analysis) ile veri boyutu 2’ye indirildi. PCA sonuçları kullanılarak K-Means, DBSCAN ve GMM kümeleri görselleştirildi.
+
 ![PCA](https://github.com/user-attachments/assets/8bfaa9cb-2337-496e-8f0c-67e83343b79b)
 
 ![PCA_boyut_indirgeme](https://github.com/user-attachments/assets/b582d151-de5f-48aa-ac91-52d9bee609b8)
@@ -82,6 +82,8 @@ Veri setindeki olası aykırı değerleri analiz etmek ve veri kalitesini değer
 # İlişki Analizi
 
 Kategorik değişkenler arasındaki anlamlı ilişkileri incelendi. Channel (müşteri tipi) ve Region (bölge) değişkenleri arasındaki ilişki, Ki-Kare Testi ile analiz edildi. Barplot grafikleri ile bu ilişki görselleştirildi.
+
+![channel_region](https://github.com/user-attachments/assets/536e81ed-25f2-4848-a6df-c66767d11d27)
 
 # Karar Ağacı (Decision Tree) Modeli
 
